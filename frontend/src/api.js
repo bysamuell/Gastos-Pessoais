@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://gastos-pessoais-backend.onrender.com';
 
 async function handleResponse(response) {
   const data = await response.json().catch(() => null);
