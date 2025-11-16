@@ -1,0 +1,182 @@
+# Como usar o Dashboard de Gastos Pessoais
+
+Este guia é para você conseguir rodar e usar o projeto sem precisar abrir o código.
+
+---
+
+## 1. Pré-requisitos
+
+- Node.js instalado (versão 18+ recomendada)
+- NPM funcionando no terminal
+
+Opcional, mas ajuda bastante:
+- Insomnia/Postman, se quiser testar a API separadamente
+
+---
+
+## 2. Subindo o backend (API)
+
+1. No terminal, vá até a pasta `backend` do projeto:
+
+
+   cd backend
+
+
+2. Instale as dependências (apenas na primeira vez):
+
+
+   npm install
+
+
+3. Crie um arquivo `.env` dentro da pasta `backend` (se ainda não existir) com o conteúdo:
+
+   
+   JWT_SECRET=sua_chave_super_secreta_aqui
+
+
+4. Suba o servidor:
+
+   
+   npm start
+   
+
+Se estiver tudo certo, você verá algo como:
+
+
+Servidor ouvindo na porta 3000
+Conectado ao banco de dados SQLite
+
+
+A API estará disponível em:
+
+- `http://localhost:3000`
+
+---
+
+## 3. Subindo o frontend (Dashboard)
+
+1. Em outro terminal, vá até a pasta `frontend`:
+
+   
+   cd frontend
+   
+
+2. Instale as dependências (se ainda não fez):
+
+   
+   npm install
+   
+
+3. Rode o frontend:
+
+   ```bash
+   npm run dev
+   ```
+
+O Vite vai mostrar um endereço, normalmente:
+
+- `http://localhost:5173/`
+
+Abra esse endereço no navegador.
+
+---
+
+## 4. Usando o sistema passo a passo
+
+### 4.1 Criar conta
+
+1. Acesse `http://localhost:5173/register`.
+2. Preencha:
+   - Nome
+   - E-mail
+   - Senha
+3. Clique em **Registrar**.
+
+Se der tudo certo, você será redirecionado para a tela de login.
+
+### 4.2 Fazer login
+
+1. Acesse `http://localhost:5173/login`.
+2. Informe o e-mail e a senha que você cadastrou.
+3. Clique em **Entrar**.
+
+Em caso de sucesso:
+- Um token JWT é salvo no navegador.
+- Você é redirecionado para `/dashboard`.
+
+### 4.3 Usar o Dashboard
+
+Na página `/dashboard` você encontra:
+
+- **Filtro por mês** (campo "Filtrar por mês"):
+  - Escolha um mês no seletor (ex.: 2025-11).
+  - O sistema carrega as despesas daquele mês.
+
+- **Total mensal**:
+  - Card colorido mostrando a soma de todas as despesas do mês filtrado.
+
+- **Formulário de despesa**:
+  - Preencha:
+    - Categoria
+    - Valor
+    - Data
+    - Descrição (opcional)
+  - Clique em **Adicionar despesa** (ou **Salvar alterações** se estiver editando).
+
+- **Tabela de despesas**:
+  - Lista todas as despesas do mês/usuário.
+  - Ações em cada linha:
+    - **Editar**: traz os dados para o formulário para você alterar.
+    - **Excluir**: remove a despesa.
+
+- **Gráfico por categoria**:
+  - Mostra um gráfico de barras com o total gasto em cada categoria no mês atual.
+
+- **Botão "Sair" (sidebar)**:
+  - Limpa o token de autenticação.
+  - Redireciona de volta para a tela de login.
+
+---
+
+## 5. Testando a API diretamente (opcional)
+
+Se quiser testar os endpoints sem o frontend (via Insomnia/Postman), use a base:
+
+- `http://localhost:3000`
+
+Fluxo típico:
+
+1. `POST /auth/register` – criar usuário
+2. `POST /auth/login` – pegar o `token`
+3. Nas rotas de despesas (`/expenses`), enviar o header:
+
+   ```http
+   Authorization: Bearer SEU_TOKEN_AQUI
+   ```
+
+4. Usar:
+   - `GET /expenses`
+   - `POST /expenses`
+   - `PUT /expenses/:id`
+   - `DELETE /expenses/:id`
+   - `GET /expenses/export`
+
+---
+
+## 6. Problemas comuns
+
+- **Frontend não consegue falar com o backend**:
+  - Verifique se o backend está rodando em `http://localhost:3000`.
+  - Veja se não há erro no terminal do backend.
+
+- **Erro de autenticação (401)**:
+  - Veja se fez login novamente.
+  - Confirme se o token ainda é válido.
+
+- **Banco zerado**:
+  - O SQLite é um arquivo local. Se você apagar o arquivo `database.sqlite`, as tabelas serão recriadas, mas os dados são perdidos.
+
+Se quiser adaptar esse projeto para produção, será interessante:
+- Usar um banco mais robusto (PostgreSQL, por exemplo).
+- Tratar melhor erros e logs.
+- Colocar o frontend e o backend em servidores separados ou em um mesmo serviço com build \ deploy.

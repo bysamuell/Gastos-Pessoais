@@ -1,0 +1,23 @@
+# Node
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+
+# Build
+dist
+dist-ssr
+
+# Sistema
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Segredos
+.env
+
+# Banco local
+*.sqlite
