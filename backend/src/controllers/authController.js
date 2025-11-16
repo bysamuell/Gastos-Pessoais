@@ -47,12 +47,14 @@ const authController = {
       }
 
       if (!user) {
-        return res.status(401).json({ mensagem: 'Credenciais inválidas.' });
+        return res
+          .status(401)
+          .json({ mensagem: 'Usuário não encontrado. Crie uma conta antes de entrar.' });
       }
 
       const senhaCorreta = bcrypt.compareSync(password, user.passwordHash);
       if (!senhaCorreta) {
-        return res.status(401).json({ mensagem: 'Credenciais inválidas.' });
+        return res.status(401).json({ mensagem: 'E-mail ou senha incorretos.' });
       }
 
       const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
